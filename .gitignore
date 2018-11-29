@@ -1,0 +1,9 @@
+node_modules/
+*.log
+dist/
+.DS_Store
+.tmp
+.idea
+.npm
+coverage
+lib-cov
