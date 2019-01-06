@@ -1,6 +1,10 @@
 # Guidebook
 
+[![CircleCI](https://circleci.com/gh/biblicalph/guidebook.svg?style=svg)](https://circleci.com/gh/biblicalph/guidebook)
+![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg "License: MIT")
+
 Guidebook is a project that seeks to teach, through code, principles and best practices when writing NodeJS applications. 
+
 
 ## What the Project Covers
 * Project structure
