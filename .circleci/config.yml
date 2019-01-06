@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  build-and-test:
+  build:
     docker:
       - image: circleci/node:8.15.0
       - image: mongo:4.1.6-xenial
