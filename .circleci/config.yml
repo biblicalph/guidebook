@@ -1,0 +1,28 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.15.0
+      - image: mongo:4.1.6-xenial
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: 
+          name: Install project dependencies
+          command: npm install --verbose
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json"}}
+          paths:
+            - node_modules
+
+      - run: npm run lint
+
+      - run:
+          name: Run tests
+          # When running Jest tests, please use the --runInBand flag: https://circleci.com/docs/2.0/collect-test-data/#jest
+          command: npm test -- --runInBand
