@@ -1,5 +1,13 @@
 {
   "presets": [
-    "env"
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "node": "8"
+        },
+        "modules": "commonjs"
+      }
+    ]
   ]
 }
