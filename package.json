@@ -9,7 +9,7 @@
     "start:dev": "nodemon src/server.js --exec babel-node",
     "test": "jest --verbose",
     "test:coverage": "npm test -- --coverage",
-    "lint": "eslint **/*.js ",
+    "lint": "eslint \"**/*.js\" ",
     "lint:fix": "npm run lint -- --fix",
     "commit": "git-cz"
   },
@@ -68,5 +68,10 @@
       "npm run lint:fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "joi": "^14.3.1",
+    "mongoose": "^5.4.3",
+    "mongoose-beautiful-unique-validation": "^7.1.1"
   }
 }
