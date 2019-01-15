@@ -9,5 +9,9 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
+    },
+    "rules": {
+        // Override to allow use of _id by Mongodb
+        "no-underscore-dangle": ["error", { "allow": ["_id"] }]
     }
 };

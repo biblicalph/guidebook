@@ -163,11 +163,15 @@ const find = model =>
    * @param {Object} [options.fields = {}] - list of fields to return for retrieved documents
    * @param {Object|String} [options.populate = ''] - space delimited list of fields to populate or a populate object
    * @param {function} [options.transform] - function which accepts and returns a Mongoose document
+   * @param {number} [options.limit = 0] - maximum number of documents to return. Defaults to
+   * returning all documents
    * @return {Object} - a Readable Stream
    */
-  ({ query, fields = {}, populate = '', transform }) => {
+  ({ query, fields = {}, populate = '', transform, limit = 0 }) => {
     const stream = model
       .find(query, fields)
+      .limit(limit)
+      // return up to 100 documents in each batch of the Mongodb response
       .batchSize(100)
       .lean()
       .populate(populate)

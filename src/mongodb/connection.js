@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { EventEmitter } from 'events';
-import * as beautifyUniqueErrors from 'mongoose-beautiful-unique-validation';
+import beautifyUniqueErrors from 'mongoose-beautiful-unique-validation';
 
 mongoose.Promise = Promise;
 mongoose.plugin(beautifyUniqueErrors);
@@ -22,7 +22,7 @@ class MongodbConnection extends EventEmitter {
       });
     }
 
-    mongoose.connect(self.dbUrl);
+    mongoose.connect(self.dbUrl, { useNewUrlParser: true });
 
     self.connection = mongoose.connection;
 
