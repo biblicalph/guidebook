@@ -8,28 +8,28 @@ node {
 
   withEnv(["ECHO_VAL=${echoVal}","EXIT_STATUS=${exitStatus}"]) {
     stage('Test') {
-      docker.image('node:8-alpine').inside {
+      
+    }
+    docker.image('node:8-alpine').inside {
+      stage('Test') {
         try {
           sh 'npm --version'
           sh 'printenv'
           sh 'NODE_ENV=development npm install'
         } catch (err) {
           echo 'Error building guidebook'
-          throw error
+          throw err
         }
       }
-    }
-    
-    stage('Test:other') {
-      git branch: 'master', url: 'https://github.com/books'
+      stage('Test:other') {
+        git branch: 'master', url: 'https://github.com/books'
 
-      docker.image('node:8-alpine').inside {
         try {
           sh 'NODE_ENV=development npm install'
           sh 'npm test'
         } catch (err) {
           echo 'Error building books'
-          throw 
+          throw err
         }
       }
     }
