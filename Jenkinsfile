@@ -2,7 +2,6 @@
 
 def COOP_APP_DIR_NAME = 'coop'
 def CYPRESS_APP_DIR_NAME = 'cypress'
-def JENKINS_HOME=pwd()
 
 def cleanUpTestDirectories() {
   sh "rm -rf ${COOP_APP_DIR_NAME} ${CYPRESS_APP_DIR_NAME}"
@@ -13,6 +12,8 @@ def setUpTestDirectories() {
 }
 
 node {
+  def JENKINS_HOME=pwd()
+
   cleanUpTestDirectories()
   setUpTestDirectories()
   sh "cd ${COOP_APP_DIR_NAME}"
