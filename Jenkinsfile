@@ -28,7 +28,7 @@ node {
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
-    docker.image('node:8-alpine').inside("-e HOME=${JENKINS_HOME} -e NODE_ENV=development") {
+    docker.image('node:8-alpine').inside("-e HOME=${JENKINS_HOME}") {
       stage('Test:coop') {
         dir(coop_dir) {
           try {
@@ -50,7 +50,7 @@ node {
           try {
             sh 'npm install'
             sh 'ls -a'
-            sh 'npm test'
+            sh 'NODE_ENV=development npm test'
           } catch (err) {
             echo 'Error build books'
             throw err
