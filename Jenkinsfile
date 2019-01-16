@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
-def booksDir = 'coop'
-def guidesDir = 'books'
+def booksDir = 'bookRepo'
+def guidesDir = 'guidebookRepo'
 def bothDirs = [booksDir, guidesDir]
 
 def cleanUpTestDirectories(directories) {
@@ -20,7 +20,9 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
-    checkout scm
+    dir(guidesDir) {
+      checkout scm
+    }
 
     dir(booksDir) {
       git branch: 'master', url: 'https://github.com/biblicalph/books'
