@@ -18,17 +18,17 @@ node {
           throw err
         }
       }
-      // stage('Test:other') {
-      //   git branch: 'master', url: 'https://github.com/books'
+      stage('Test:other') {
+        git branch: 'master', url: 'https://github.com/books'
 
-      //   try {
-      //     sh 'NODE_ENV=development npm install'
-      //     sh 'npm test'
-      //   } catch (err) {
-      //     echo 'Error building books'
-      //     throw err
-      //   }
-      // }
+        try {
+          sh 'NODE_ENV=development npm install'
+          sh 'npm test'
+        } catch (err) {
+          echo 'Error building books'
+          throw err
+        }
+      }
     }
   }
 }
