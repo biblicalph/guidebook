@@ -20,8 +20,6 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
-    sh 'docker volume prune'
-    
     dir(guidesDir) {
       checkout scm
     }
@@ -35,10 +33,12 @@ node {
 
   if (run_test) {
     docker.image('node:8-alpine').inside('-e NODE_ENV=development') {
+      sh 'pwd'
+      sh 'ls'
+      sh 'rm -rf ./*'
+      
       stage('Test:guidebook') {
         try {
-          sh 'pwd'
-          sh 'ls'
           sh 'npm install'
           sh 'npm test -- __tests__/sample.spec.js'
         } catch (err) {
