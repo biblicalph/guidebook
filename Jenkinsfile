@@ -20,6 +20,8 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
+    sh 'docker volume prune'
+    
     dir(guidesDir) {
       checkout scm
     }
