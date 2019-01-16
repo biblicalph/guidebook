@@ -51,7 +51,7 @@ node {
           try {
             sh 'npm install'
             sh 'ls -a'
-            pwd()
+            sh 'pwd'
             sh 'NODE_ENV=development npm test'
           } catch (err) {
             echo 'Error build books'
