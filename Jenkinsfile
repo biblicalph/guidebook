@@ -4,10 +4,12 @@ def coop_dir_name = 'coop'
 def cypress_dir_name = 'cypress'
 
 def cleanUpTestDirectories() {
+  echo 'Cleaning directories...'
   sh "rm -rf ${coop_dir_name} ${coop_dir_name}"
 }
 
 def setUpTestDirectories() {
+  echo 'setting up directories...'
   sh "mkdir ${coop_dir_name} ${coop_dir_name}"
 }
 
