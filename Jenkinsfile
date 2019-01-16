@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-node('docker') {
+node {
   checkout scm
   
   def echoVal = sh(script: 'echo "clang"', returnStdout: true)
