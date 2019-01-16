@@ -1,31 +1,36 @@
 #!/usr/bin/env groovy
 
-def coop_dir_name = 'coop'
-def cypress_dir_name = 'cypress'
+def coop_dir = 'coop'
+def cypress_dir = 'cypress'
+def coop_cypress_dirs = [coop_dir, cypress_dir]
 
-def cleanUpTestDirectories() {
+def cleanUpTestDirectories(directories) {
   echo 'Cleaning directories...'
-  sh "rm -rf ${coop_dir_name} ${coop_dir_name}"
+  for (i = 0; i < directories.size(); ++i) {
+    sh "rm -rf ${directories[i]}"
+  }
 }
 
-def setUpTestDirectories() {
+def setUpTestDirectories(directories) {
   echo 'setting up directories...'
-  sh "mkdir ${coop_dir_name} ${coop_dir_name}"
+  for (i = 0; i < directories.size(); ++i) {
+    sh "mkdir ${directories[i]}"
+  }
 }
 
 node {
   def JENKINS_HOME=pwd()
 
-  cleanUpTestDirectories()
-  setUpTestDirectories()
-  sh "cd ${coop_dir_name}"
+  cleanUpTestDirectories(coop_cypress_dirs)
+  setUpTestDirectories(coop_cypress_dirs)
+  sh "cd ${coop_dir}"
   checkout scm
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
     docker.image('node:8-alpine').inside("-e HOME=${JENKINS_HOME} -e NODE_ENV=development") {
       stage('Test:coop') {
-        dir(coop_dir_name) {
+        dir(coop_dir) {
           try {
             sh 'npm --version'
             sh 'printenv'
@@ -39,7 +44,7 @@ node {
         }
       }
       stage('Test:cypress') {
-        dir(cypress_dir_name) {
+        dir(cypress_dir) {
           git branch: 'master', url: 'https://github.com/biblicalph/books'
 
           try {
