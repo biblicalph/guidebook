@@ -50,8 +50,9 @@ node {
 
           try {
             sh 'npm install'
-            sh 'ls -a'
             sh 'pwd'
+            sh 'ls -a node_modules | grep "babel"'
+            sh 'ls -a node_modules/@babel'
             sh 'NODE_ENV=development npm test'
           } catch (err) {
             echo 'Error build books'
