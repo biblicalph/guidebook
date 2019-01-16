@@ -13,9 +13,23 @@ node {
           sh 'npm --version'
           sh 'printenv'
           sh 'NODE_ENV=development npm install'
-          sh 'npm test -- __tests__/sample.spec.js'
         } catch (err) {
+          echo 'Error building guidebook'
           throw error
+        }
+      }
+
+      stage('Test:other') {
+        git branch: 'master', url: 'https://github.com/books'
+
+        docker.image('node:8-alpine').inside {
+          try {
+            sh 'NODE_ENV=development npm install'
+            sh 'npm test'
+          } catch {
+            echo 'Error building books'
+            throw 
+          }
         }
       }
     }
