@@ -6,39 +6,38 @@ node {
 
   withEnv(["ECHO_VAL=${echoVal}","EXIT_STATUS=${exitStatus}"]) {
     docker.image('node:8-alpine').inside {
-      stage('Test') {
-        sh 'mkdir coop'
-        dir('coop') {
-          checkout scm
+      parallel(
+        stage('Test:coop') {
+          dir('coop') {
+            checkout scm
 
-          try {
-            sh 'npm --version'
-            sh 'printenv'
-            sh 'NODE_ENV=development npm install'
-            sh 'pwd'
-            sh 'ls -a'
-          } catch (err) {
-            echo 'Error building guidebook'
-            throw err
+            try {
+              sh 'npm --version'
+              sh 'printenv'
+              sh 'NODE_ENV=development npm install'
+              sh 'pwd'
+              sh 'ls -a'
+            } catch (err) {
+              echo 'Error building guidebook'
+              throw err
+            }
           }
         }
-      }
-      stage('Test:Cypress') {
-        sh 'mkdir cypress'
+        stage('Test:cypress') {
+          dir('cypress') {
+            git branch: 'master', url: 'https://github.com/biblicalph/books'
 
-        dir('cypress') {
-          git branch: 'master', url: 'https://github.com/biblicalph/books'
-
-          try {
-            sh 'NODE_ENV=development npm install'
-            sh 'ls -a'
-            sh 'npm test'
-          } catch (err) {
-            echo 'Error building books'
-            throw err
+            try {
+              sh 'NODE_ENV=development npm install'
+              sh 'ls -a'
+              sh 'npm test'
+            } catch (err) {
+              echo 'Error building books'
+              throw err
+            }
           }
         }
-      }
+      )
     }
   }
 }
