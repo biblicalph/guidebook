@@ -19,23 +19,23 @@ def setUpTestDirectories(directories) {
 }
 
 node {
-  def JENKINS_HOME=pwd()
+  stage('Checkout') {
+    checkout scm
 
-  cleanUpTestDirectories(coop_cypress_dirs)
-  setUpTestDirectories(coop_cypress_dirs)
-  sh "cd ${coop_dir}"
-  checkout scm
+    dir(booksRepoDir) {
+      git branch: 'master', url: 'https://github.com/biblicalph/books'
+    }
+  }
+
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
-    docker.image('node:8-alpine').inside {
-      stage('Test:coop') {
+    docker.image('node:8-alpine').inside('-e NODE_ENV=development') {
+      stage('Test:guidebook') {
         try {
-          sh 'npm --version'
-          // sh 'printenv'
-          sh 'NODE_ENV=development npm install'
           sh 'pwd'
-          sh 'ls -a'
+          sh 'ls'
+          sh 'npm install'
           sh 'npm test -- __tests__/sample.spec.js'
         } catch (err) {
           echo 'Error building guidebook'
@@ -43,22 +43,60 @@ node {
         }
       }
       stage('Test:cypress') {
-        sh "cd ${cypress_dir}"
-        git branch: 'master', url: 'https://github.com/biblicalph/books'
-
-        try {
-          sh 'npm install'
-          sh 'pwd'
-          sh 'ls -a node_modules | grep "babel"'
-          sh 'ls -a node_modules/@babel'
-          sh 'NODE_ENV=development npm test'
-        } catch (err) {
-          echo 'Error build books'
-          throw err
+        dir(booksRepoDir) {
+          try {
+            sh 'pwd'
+            sh 'ls'
+            sh 'npm install'
+            sh 'npm test'
+          } catch (err) {
+            echo 'Error build books'
+            throw err
+          }
         }
       }
     }
   } else {
-    echo 'Skipping tests...'
+    echo 'Skipped tests...'
   }
+  // cleanUpTestDirectories(coop_cypress_dirs)
+  // setUpTestDirectories(coop_cypress_dirs)
+  // sh "cd ${coop_dir}"
+  // checkout scm
+  // def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
+
+  // if (run_test) {
+  //   docker.image('node:8-alpine').inside {
+  //     stage('Test:coop') {
+  //       try {
+  //         sh 'npm --version'
+  //         // sh 'printenv'
+  //         sh 'NODE_ENV=development npm install'
+  //         sh 'pwd'
+  //         sh 'ls -a'
+  //         sh 'npm test -- __tests__/sample.spec.js'
+  //       } catch (err) {
+  //         echo 'Error building guidebook'
+  //         throw err
+  //       }
+  //     }
+  //     stage('Test:cypress') {
+  //       sh "cd ${cypress_dir}"
+  //       git branch: 'master', url: 'https://github.com/biblicalph/books'
+
+  //       try {
+  //         sh 'npm install'
+  //         sh 'pwd'
+  //         sh 'ls -a node_modules | grep "babel"'
+  //         sh 'ls -a node_modules/@babel'
+  //         sh 'NODE_ENV=development npm test'
+  //       } catch (err) {
+  //         echo 'Error build books'
+  //         throw err
+  //       }
+  //     }
+  //   }
+  // } else {
+  //   echo 'Skipping tests...'
+  // }
 }
