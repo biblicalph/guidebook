@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def coop_dir = 'coop'
-def cypress_dir = 'cypress'
+def cypress_dir = 'books'
 def coop_cypress_dirs = [coop_dir, cypress_dir]
 
 def cleanUpTestDirectories(directories) {
@@ -30,34 +30,31 @@ node {
   if (run_test) {
     docker.image('node:8-alpine').inside {
       stage('Test:coop') {
-        dir(coop_dir) {
-          try {
-            sh 'npm --version'
-            // sh 'printenv'
-            sh 'NODE_ENV=development npm install'
-            sh 'pwd'
-            sh 'ls -a'
-            sh 'npm test -- __tests__/sample.spec.js'
-          } catch (err) {
-            echo 'Error building guidebook'
-            throw err
-          }
+        try {
+          sh 'npm --version'
+          // sh 'printenv'
+          sh 'NODE_ENV=development npm install'
+          sh 'pwd'
+          sh 'ls -a'
+          sh 'npm test -- __tests__/sample.spec.js'
+        } catch (err) {
+          echo 'Error building guidebook'
+          throw err
         }
       }
       stage('Test:cypress') {
-        dir(cypress_dir) {
-          git branch: 'master', url: 'https://github.com/biblicalph/books'
+        sh "cd ${cypress_dir}"
+        git branch: 'master', url: 'https://github.com/biblicalph/books'
 
-          try {
-            sh 'npm install'
-            sh 'pwd'
-            sh 'ls -a node_modules | grep "babel"'
-            sh 'ls -a node_modules/@babel'
-            sh 'NODE_ENV=development npm test'
-          } catch (err) {
-            echo 'Error build books'
-            throw err
-          }
+        try {
+          sh 'npm install'
+          sh 'pwd'
+          sh 'ls -a node_modules | grep "babel"'
+          sh 'ls -a node_modules/@babel'
+          sh 'NODE_ENV=development npm test'
+        } catch (err) {
+          echo 'Error build books'
+          throw err
         }
       }
     }
