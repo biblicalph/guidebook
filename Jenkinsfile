@@ -4,12 +4,15 @@ node {
   def echoVal = sh(script: 'echo "clang"', returnStdout: true)
   def exitStatus = sh(script: 'exit 1', returnStatus: true)
 
-  withEnv(["ECHO_VAL=${echoVal}","EXIT_STATUS=${exitStatus}"]) {
-    docker.image('node:8-alpine').inside {
+  dir('coop') {
+    checkout scm
+    def run_test = sh (script: "git log -l | grep '\\[skip test\\]'", returnStatus)
+  }
+
+  if (run_test) {
+    docker.image('node:8-alpine').inside("-e HOME=${pwd()} -e NODE_ENV=development") {
       stage('Test:coop') {
         dir('coop') {
-          checkout scm
-
           try {
             sh 'npm --version'
             sh 'printenv'
@@ -31,11 +34,13 @@ node {
             sh 'ls -a'
             sh 'npm test'
           } catch (err) {
-            echo 'Error building books'
+            echo 'Error build books'
             throw err
           }
         }
       }
     }
+  } else {
+    echo 'Skipping tests...'
   }
 }
