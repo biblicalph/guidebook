@@ -15,6 +15,8 @@ node {
             sh 'npm --version'
             sh 'printenv'
             sh 'NODE_ENV=development npm install'
+            sh 'pwd'
+            sh 'ls -a'
           } catch (err) {
             echo 'Error building guidebook'
             throw err
@@ -23,12 +25,13 @@ node {
       }
       stage('Test:Cypress') {
         sh 'mkdir cypress'
-        
+
         dir('cypress') {
-          git branch: 'master', url: 'https://github.com/books'
+          git branch: 'master', url: 'https://github.com/biblicalph/books'
 
           try {
             sh 'NODE_ENV=development npm install'
+            sh 'ls -a'
             sh 'npm test'
           } catch (err) {
             echo 'Error building books'
