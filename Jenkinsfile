@@ -1,16 +1,28 @@
 #!/usr/bin/env groovy
 
+def COOP_APP_DIR_NAME = 'coop'
+def CYPRESS_APP_DIR_NAME = 'cypress'
+def JENKINS_HOME=pwd()
+
+def cleanUpTestDirectories() {
+  sh "rm -rf ${COOP_APP_DIR_NAME} ${CYPRESS_APP_DIR_NAME}"
+}
+
+def setUpTestDirectories() {
+  sh "mkdir ${COOP_APP_DIR_NAME} ${CYPRESS_APP_DIR_NAME}"
+}
+
 node {
-  sh 'rm -rf coop cypress'
-  sh 'mkdir coop cypress'
-  sh 'cd coop'
+  cleanUpTestDirectories()
+  setUpTestDirectories()
+  sh "cd ${COOP_APP_DIR_NAME}"
   checkout scm
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
-    docker.image('node:8-alpine').inside("-e HOME=${pwd()} -e NODE_ENV=development") {
+    docker.image('node:8-alpine').inside("-e HOME=${JENKINS_HOME} -e NODE_ENV=development") {
       stage('Test:coop') {
-        dir('coop') {
+        dir(COOP_APP_DIR_NAME) {
           try {
             sh 'npm --version'
             sh 'printenv'
@@ -24,11 +36,11 @@ node {
         }
       }
       stage('Test:cypress') {
-        dir('cypress') {
+        dir(CYPRESS_APP_DIR_NAME) {
           git branch: 'master', url: 'https://github.com/biblicalph/books'
 
           try {
-            sh 'NODE_ENV=development npm install'
+            sh 'npm install'
             sh 'ls -a'
             sh 'npm test'
           } catch (err) {
