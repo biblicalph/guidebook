@@ -37,6 +37,7 @@ node {
             sh 'NODE_ENV=development npm install'
             sh 'pwd'
             sh 'ls -a'
+            sh 'npm test -- __tests__/sample.spec.js'
           } catch (err) {
             echo 'Error building guidebook'
             throw err
