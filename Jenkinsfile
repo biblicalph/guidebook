@@ -27,7 +27,7 @@ node {
         try {
           sh 'NODE_ENV=development npm install'
           sh 'npm test'
-        } catch {
+        } catch (err) {
           echo 'Error building books'
           throw 
         }
