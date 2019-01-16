@@ -19,7 +19,7 @@ node {
         }
       }
       stage('Test:other') {
-        git branch: 'master', url: 'https://github.com/books'
+        git branch: 'master', url: 'https://github.com/biblicalph/books'
 
         try {
           sh 'NODE_ENV=development npm install'
