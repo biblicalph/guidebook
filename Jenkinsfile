@@ -1,12 +1,9 @@
 #!/usr/bin/env groovy
 
 node {
-  def echoVal = sh(script: 'echo "clang"', returnStdout: true)
-  def exitStatus = sh(script: 'exit 1', returnStatus: true)
-
   dir('coop') {
     checkout scm
-    def run_test = sh (script: "git log -l | grep '\\[skip test\\]'", returnStatus)
+    def run_test = sh (script: "git log -l | grep '\\[skip test\\]'", returnStatus: true)
   }
 
   if (run_test) {
