@@ -9,19 +9,15 @@ const connectToDb = () =>
     // JEST can run tests in parallel. Using different db helps avoid test data conflicts
     db = getDbConnection(`mongodb://localhost/${faker.random.uuid()}`);
     db.on('connected', () => {
-      resolve(db)
+      resolve(db);
     });
     db.connect();
   });
 
 const clearDb = () => {
-  // Object.keys(mongoose.connection.collections).map(key => {
-  //   return mongoose.connection.collections[key].deleteMany({});
-  // });
-  const promises = [];
-  for (let name in  mongoose.connection.db.collections) {
-    promises.push(mongoose.connection.db.collections[name].deleteMany({}));
-  }
+  const promises = Object.keys(mongoose.connection.collections).map(key =>
+    mongoose.connection.collections[key].deleteMany({}),
+  );
 
   return Promise.all(promises);
 };

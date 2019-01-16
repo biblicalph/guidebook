@@ -22,7 +22,10 @@ class MongodbConnection extends EventEmitter {
       });
     }
 
-    mongoose.connect(self.dbUrl, { useNewUrlParser: true });
+    mongoose.connect(
+      self.dbUrl,
+      { useNewUrlParser: true },
+    );
 
     self.connection = mongoose.connection;
 

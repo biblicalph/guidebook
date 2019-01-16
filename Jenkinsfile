@@ -7,9 +7,6 @@ node {
   def exitStatus = sh(script: 'exit 1', returnStatus: true)
 
   withEnv(["ECHO_VAL=${echoVal}","EXIT_STATUS=${exitStatus}"]) {
-    stage('Test') {
-      
-    }
     docker.image('node:8-alpine').inside {
       stage('Test') {
         try {
@@ -21,17 +18,17 @@ node {
           throw err
         }
       }
-      stage('Test:other') {
-        git branch: 'master', url: 'https://github.com/books'
+      // stage('Test:other') {
+      //   git branch: 'master', url: 'https://github.com/books'
 
-        try {
-          sh 'NODE_ENV=development npm install'
-          sh 'npm test'
-        } catch (err) {
-          echo 'Error building books'
-          throw err
-        }
-      }
+      //   try {
+      //     sh 'NODE_ENV=development npm install'
+      //     sh 'npm test'
+      //   } catch (err) {
+      //     echo 'Error building books'
+      //     throw err
+      //   }
+      // }
     }
   }
 }
