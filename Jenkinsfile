@@ -1,10 +1,10 @@
 #!/usr/bin/env groovy
 
 node {
-  dir('coop') {
-    checkout scm
-    def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
-  }
+  sh 'mkdir coop cypress'
+  sh 'cd coop'
+  checkout scm
+  def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
     docker.image('node:8-alpine').inside("-e HOME=${pwd()} -e NODE_ENV=development") {
