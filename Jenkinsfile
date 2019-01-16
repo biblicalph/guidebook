@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-def coop_dir = 'coop'
-def cypress_dir = 'books'
-def coop_cypress_dirs = [coop_dir, cypress_dir]
+def booksDir = 'coop'
+def guidesDir = 'books'
+def bothDirs = [booksDir, guidesDir]
 
 def cleanUpTestDirectories(directories) {
   echo 'Cleaning directories...'
@@ -22,7 +22,7 @@ node {
   stage('Checkout') {
     checkout scm
 
-    dir(booksRepoDir) {
+    dir(booksDir) {
       git branch: 'master', url: 'https://github.com/biblicalph/books'
     }
   }
@@ -43,7 +43,7 @@ node {
         }
       }
       stage('Test:cypress') {
-        dir(booksRepoDir) {
+        dir(booksDir) {
           try {
             sh 'pwd'
             sh 'ls'
