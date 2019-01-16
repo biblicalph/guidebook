@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 
 node {
+  sh 'rm -rf coop cypress'
   sh 'mkdir coop cypress'
   sh 'cd coop'
   checkout scm
