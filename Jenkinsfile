@@ -22,10 +22,14 @@ node {
   stage('Checkout') {
     dir(guidesDir) {
       checkout scm
+      sh 'pwd'
+      sh 'ls'
     }
 
     dir(booksDir) {
       git branch: 'master', url: 'https://github.com/biblicalph/books'
+      sh 'pwd'
+      sh 'ls'
     }
   }
 
@@ -36,14 +40,16 @@ node {
       sh 'pwd'
       sh 'ls'
       sh 'rm -rf ./*'
-      
+
       stage('Test:guidebook') {
-        try {
-          sh 'npm install'
-          sh 'npm test -- __tests__/sample.spec.js'
-        } catch (err) {
-          echo 'Error building guidebook'
-          throw err
+        dir(guidesDir) {
+          try {
+            sh 'npm install'
+            sh 'npm test -- __tests__/sample.spec.js'
+          } catch (err) {
+            echo 'Error building guidebook'
+            throw err
+          }
         }
       }
       stage('Test:cypress') {
