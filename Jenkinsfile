@@ -20,6 +20,8 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
+    cleanUpTestDirectories(directories)
+
     dir(guidesDir) {
       checkout scm
       sh 'pwd'
@@ -33,14 +35,11 @@ node {
     }
   }
 
+  sh "cd ${guidesDir}"
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
     docker.image('node:8-alpine').inside('-e NODE_ENV=development') {
-      sh 'pwd'
-      sh 'ls'
-      sh 'rm -rf ./*'
-
       stage('Test:guidebook') {
         dir(guidesDir) {
           try {
