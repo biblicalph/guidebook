@@ -57,6 +57,8 @@ node {
             sh 'pwd'
             sh 'ls'
             sh 'npm install'
+            sh 'pwd'
+            sh 'ls'
             sh 'npm test'
           } catch (err) {
             echo 'Error build books'
