@@ -20,7 +20,7 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
-    cleanUpTestDirectories(directories)
+    cleanUpTestDirectories(bothDirs)
 
     dir(guidesDir) {
       checkout scm
