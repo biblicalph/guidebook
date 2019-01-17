@@ -59,7 +59,7 @@ node {
             sh 'npm install'
             sh 'pwd'
             sh 'ls'
-            sh './node_modules/.bin/jest'
+            sh 'npm test'
           } catch (err) {
             echo 'Error build books'
             throw err
