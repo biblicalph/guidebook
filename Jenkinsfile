@@ -8,7 +8,11 @@ node {
     checkout scm
 
     dir(booksDir) {
-      git branch: 'master', url: 'git@github.com:biblicalph/books.git'
+      checkout([
+        $class: 'GitSCM', 
+        branches: [[name: 'master']],
+        userRemoteConfigs: [[url: 'https://github.com/biblicalph/books']]
+      ])
       sh 'pwd'
       sh 'touch .babelrc'
       sh 'echo "{}" >> .babelrc'
