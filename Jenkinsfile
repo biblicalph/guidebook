@@ -1,22 +1,6 @@
 #!/usr/bin/env groovy
 
 def booksDir = 'bookRepo'
-def guidesDir = 'guidebookRepo'
-def bothDirs = [booksDir, guidesDir]
-
-def cleanUpTestDirectories(directories) {
-  echo 'Cleaning directories...'
-  for (i = 0; i < directories.size(); ++i) {
-    sh "rm -rf ${directories[i]}"
-  }
-}
-
-def setUpTestDirectories(directories) {
-  echo 'setting up directories...'
-  for (i = 0; i < directories.size(); ++i) {
-    sh "mkdir ${directories[i]}"
-  }
-}
 
 node {
   stage('Checkout') {
