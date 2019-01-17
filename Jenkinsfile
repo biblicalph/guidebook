@@ -4,6 +4,7 @@ def booksDir = 'bookRepo'
 
 node {
   stage('Checkout') {
+    sh "rm -rf ./*"
     checkout scm
 
     dir(booksDir) {
