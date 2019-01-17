@@ -20,35 +20,29 @@ def setUpTestDirectories(directories) {
 
 node {
   stage('Checkout') {
-    cleanUpTestDirectories(bothDirs)
-
-    dir(guidesDir) {
-      checkout scm
-      sh 'pwd'
-      sh 'ls'
-    }
+    checkout scm
 
     dir(booksDir) {
       git branch: 'master', url: 'https://github.com/biblicalph/books'
       sh 'pwd'
+      sh 'touch .babelrc'
+      sh 'echo "{}" >> .babelrc'
       sh 'ls'
+      sh 'cat .babelrc'
     }
   }
 
-  sh "cd ${guidesDir}"
   def run_test = sh (script: "git log -1 | grep '\\[skip test\\]'", returnStatus: true)
 
   if (run_test) {
     docker.image('node:8-alpine').inside('-e NODE_ENV=development') {
       stage('Test:guidebook') {
-        dir(guidesDir) {
-          try {
-            sh 'npm install'
-            sh 'npm test -- __tests__/sample.spec.js'
-          } catch (err) {
-            echo 'Error building guidebook'
-            throw err
-          }
+        try {
+          sh 'npm install'
+          sh 'npm test -- __tests__/sample.spec.js'
+        } catch (err) {
+          echo 'Error building guidebook'
+          throw err
         }
       }
       stage('Test:cypress') {
