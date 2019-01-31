@@ -68,5 +68,9 @@
       "npm run lint:fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11"
   }
 }
