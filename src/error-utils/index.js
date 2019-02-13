@@ -1,6 +1,25 @@
 import { isEmpty } from 'lodash/fp';
 import joi from 'joi';
 
+/**
+ * @typedef {Object} ErrorDetail
+ * @property {String} field - the error field/property
+ * @property {String} value - the error value
+ * @property {String} message - the error message
+ *
+ * @typedef {Object} ErrorOptions
+ * @property {String} name - the error name
+ * @property {String} message - the error message
+ * @property {ErrorDetail[]} [details] - array of error details
+ * @property {String} [code] - optional error code
+ *
+ * @typedef {Object} CustomError
+ * @property {String} message - the error message
+ * @property {String} name - the error name
+ * @property {String} [code] - the error code
+ * @property {String} stack - the error stack trace
+ * @property {ErrorDetail[]} [details] - the error details
+ */
 const errorDetailsEntrySchema = joi
   .object()
   .keys({
@@ -30,15 +49,8 @@ const errorSchema = joi
 
 /**
  * Create a new error. Omit stacktrace above the calling function
- * @param {Object} options
- * @param {String} options.name - the name of the error.
- * @param {String} options.message - the error message
- * @param {Array} [options.details] - the error details
- * @param {String} [options.details.field] - the error details field
- * @param {String} [options.details.value] - the error details value
- * @param {String} [options.details.message] - the error details message
- * @param {String} [options.code] - the error code
- * @return {Object} the error object
+ * @param {ErrorOptions} options
+ * @return {CustomError} an instance of error
  */
 export const createCustomError = ({ name, message, details, code }) => {
   const opts = joi.attempt({ name, message, details, code }, errorSchema);
@@ -58,6 +70,11 @@ export const createCustomError = ({ name, message, details, code }) => {
 
 export const VALIDATION_ERROR_NAME = 'GuidebookValidationError';
 
+/**
+ * Create a validation error
+ * @param {ErrorOptions} options
+ * @return {CustomError} a validation error
+ */
 export function createValidationError({
   name = VALIDATION_ERROR_NAME,
   message,

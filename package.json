@@ -9,7 +9,7 @@
     "start:dev": "nodemon src/server.js --exec babel-node",
     "test": "jest --verbose",
     "test:coverage": "npm test -- --coverage",
-    "lint": "eslint **/*.js ",
+    "lint": "eslint \"**/*.js\" ",
     "lint:fix": "npm run lint -- --fix",
     "commit": "git-cz"
   },
@@ -39,6 +39,7 @@
     "@babel/preset-env": "^7.2.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
+    "bson-objectid": "^1.2.4",
     "commitizen": "^3.0.5",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.9.0",
@@ -46,8 +47,9 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "faker": "^4.1.0",
     "husky": "^1.2.0",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "lint-staged": "^8.1.0",
     "nodemon": "^1.18.7",
     "prettier": "^1.15.2"
@@ -70,7 +72,10 @@
     ]
   },
   "dependencies": {
+    "bluebird": "^3.5.3",
     "joi": "^14.3.1",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.3",
+    "mongoose-beautiful-unique-validation": "^7.1.1"
   }
 }

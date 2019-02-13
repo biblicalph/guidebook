@@ -1,7 +1,10 @@
-version: 2
+version: 2.1
 
 jobs:
   build:
+    environment:
+      NODE_ENV: 'test'
+    working_directory: ~/guidebook
     docker:
       - image: circleci/node:8.15.0
       - image: mongo:4.1.6-xenial
@@ -26,3 +29,9 @@ jobs:
           name: Run tests
           # When running Jest tests, please use the --runInBand flag: https://circleci.com/docs/2.0/collect-test-data/#jest
           command: npm test -- --runInBand
+
+workflows:
+  version: 2.1
+  run_build:
+    jobs:
+      - build
